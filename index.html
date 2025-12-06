@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gensyn Learning Hub – Community Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Your Discord image as favicon -->
+  <link rel="icon" type="image/png"
+    href="https://media.discordapp.net/attachments/1335238110623174707/1446798931077107712/Untitled_design.png?ex=69354c01&is=6933fa81&hm=bd73948f6e4c89dda1cf174af0fdd490621c9173c693e530619d23fc89ae51f6&=&format=webp&quality=lossless&width=500&height=500" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --bg: #f5f7fb;
+      --bg-soft: #eef2ff;
+      --card: #ffffff;
+      --border-subtle: rgba(148, 163, 184, 0.45);
+      --text-main: #0f172a;
+      --text-soft: #6b7280;
+      --accent-blue: #2563eb;
+      --accent-purple: #7c3aed;
+      --accent-soft: rgba(37, 99, 235, 0.06);
+      --radius-pill: 999px;
+      --radius-card: 16px;
+      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --page-width: 1120px;
+      --border-strong: rgba(148, 163, 184, 0.7);
+    }
+
+    /* Dark mode overrides */
+    body[data-theme="dark"] {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --border-subtle: rgba(30, 64, 175, 0.65);
+      --text-main: #e5e7eb;
+      --text-soft: #9ca3af;
+      --accent-blue: #60a5fa;
+      --accent-purple: #a855f7;
+      --accent-soft: rgba(56, 189, 248, 0.1);
+      --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.75);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e0e7ff, transparent 55%), var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0 16px 40px;
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(245, 247, 251, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(209, 213, 219, 0.8);
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+    body[data-theme="dark"] .nav {
+      background: rgba(15, 23, 42, 0.96);
+      border-bottom-color: rgba(51, 65, 85, 0.9);
+    }
+    .nav-inner {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: #000;
+      flex-shrink: 0;
+      animation: logoGlow 3.5s ease-in-out infinite alternate;
+    }
+    .nav-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .nav-title-main {
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #111827;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body[data-theme="dark"] .nav-title-main { color: #e5e7eb; }
+    .nav-title-sub {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      flex: 1;
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+    .nav-links a {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      color: var(--text-soft);
+      transition: 0.15s;
+    }
+    .nav-links a:hover {
+      border-color: rgba(148, 163, 184, 0.9);
+      background: #e5e7eb;
+      color: #111827;
+    }
+    body[data-theme="dark"] .nav-links a:hover {
+      background: rgba(30, 64, 175, 0.4);
+      border-color: rgba(129, 140, 248, 0.9);
+      color: #e5e7eb;
+    }
+
+    .nav-cta {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+      white-space: nowrap;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.55);
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .toggle-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+    .toggle-btn:hover {
+      transform: translateY(-1px);
+      background: #e5e7eb;
+    }
+    body[data-theme="dark"] .toggle-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+
+    /* HERO */
+    .hero.section-animate {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.4fr);
+      gap: 20px;
+      padding: 28px 0 24px;
+      align-items: center;
+    }
+    .hero-left { max-width: 560px; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #e5e7ff;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+    body[data-theme="dark"] .hero-eyebrow {
+      background: rgba(30, 64, 175, 0.6);
+      border-color: rgba(129, 140, 248, 0.9);
+      color: #e5e7eb;
+    }
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .hero-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-size: 2.1rem;
+      line-height: 1.15;
+      margin: 0 0 10px;
+      color: #0b1120;
+    }
+    body[data-theme="dark"] .hero-title { color: #e5e7eb; }
+
+    .hero-title-main span {
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-title-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #000;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hero-title-logo:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 15px 0 rgba(129, 140, 248, 0.8);
+    }
+
+    .hero-subtitle {
+      margin: 0 0 12px;
+      font-size: 0.96rem;
+      color: var(--text-soft);
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.78rem;
+      margin: 10px 0 14px;
+    }
+    .pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: #eef2ff;
+      color: #374151;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.45);
+    }
+    body[data-theme="dark"] .pill {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .hero-btn-primary,
+    .hero-btn-secondary,
+    .copy-btn,
+    .quiz-btn {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    .hero-btn-primary:hover,
+    .hero-btn-secondary:hover,
+    .copy-btn:hover,
+    .quiz-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+    }
+
+    .hero-btn-primary {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-btn-secondary {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: #e5e7eb;
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    body[data-theme="dark"] .hero-btn-secondary {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+    .hero-note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    .hero-right { display: flex; justify-content: center; }
+    .hero-card {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 18px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 14px 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .hero-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.4);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    .hero-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .hero-logo-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #000;
+      padding: 6px;
+      flex-shrink: 0;
+      animation: floatLogo 4s ease-in-out infinite alternate;
+    }
+    .hero-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    body[data-theme="dark"] .hero-card-title { color: #e5e7eb; }
+    .hero-card-tag {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+    .hero-card-body {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+    .hero-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .hero-stat {
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 6px 7px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .hero-stat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.45);
+    }
+    body[data-theme="dark"] .hero-stat {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .hero-stat-label {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+    }
+    .hero-stat-value {
+      font-size: 0.9rem;
+      color: #111827;
+    }
+    body[data-theme="dark"] .hero-stat-value { color: #e5e7eb; }
+
+    .hero-pfp-row {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(209, 213, 219, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-pfp {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: #000;
+      flex-shrink: 0;
+    }
+    .hero-pfp-text-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    body[data-theme="dark"] .hero-pfp-text-title { color: #e5e7eb; }
+    .hero-pfp-text-sub {
+      font-size: 0.76rem;
+      color: var(--text-soft);
+    }
+
+    /* GENERIC SECTION */
+    section.block.section-animate {
+      margin-top: 22px;
+      padding: 18px 16px;
+      border-radius: var(--radius-card);
+      background: var(--card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+    }
+    section.block h2 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      color: #111827;
+    }
+    body[data-theme="dark"] section.block h2 { color: #e5e7eb; }
+    .section-tagline {
+      margin: 0 0 10px;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+
+    /* SCROLL ANIMATIONS */
+    .section-animate {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(3px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out,
+        filter 0.6s ease-out;
+    }
+    .section-animate.in-view {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* HOW IT WORKS */
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 0.85rem;
+    }
+    .how-step {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .how-step:hover {
+      transform: translateY(-3px);
+      border-color: rgba(129, 140, 248, 0.9);
+      box-shadow: 0 14px 32px rgba(148, 163, 184, 0.45);
+    }
+    body[data-theme="dark"] .how-step {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .how-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #111827;
+    }
+    body[data-theme="dark"] .how-title { color: #e5e7eb; }
+    .how-body {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    /* FLOW DIAGRAM */
+    .flow-diagram {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      background: #eef2ff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+    }
+    body[data-theme="dark"] .flow-diagram {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .flow-step {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, 0.8);
+      background: rgba(239, 246, 255, 0.9);
+      white-space: nowrap;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .flow-step:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(129, 140, 248, 0.6);
+    }
+    body[data-theme="dark"] .flow-step {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(129, 140, 248, 0.9);
+      color: #e5e7eb;
+    }
+    .flow-arrow {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* WHO IT'S FOR */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 0.85rem;
+    }
+    .aud-card {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 10px 10px 11px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .aud-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .aud-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .aud-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 3px;
+    }
+    body[data-theme="dark"] .aud-title { color: #e5e7eb; }
+    .aud-label {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 5px;
+    }
+    .aud-list {
+      margin: 4px 0;
+      padding-left: 16px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+    .aud-list li { margin-bottom: 3px; }
+
+    /* GLOSSARY */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.84rem;
+      margin-top: 8px;
+    }
+    .glossary-item {
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .glossary-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .glossary-item {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .glossary-term {
+      font-weight: 600;
+      font-size: 0.86rem;
+      margin-bottom: 2px;
+      color: #111827;
+    }
+    body[data-theme="dark"] .glossary-term { color: #e5e7eb; }
+    .glossary-definition {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    /* LITEPAPER CARDS */
+    .lite-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.84rem;
+      margin-top: 8px;
+    }
+    .lite-card {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .lite-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 34px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .lite-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .lite-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .lite-body {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    /* COMPARISON TABLE */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.82rem;
+    }
+    .compare-table th,
+    .compare-table td {
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .compare-table th {
+      background: #eef2ff;
+      font-weight: 600;
+    }
+    body[data-theme="dark"] .compare-table th {
+      background: rgba(30, 64, 175, 0.5);
+    }
+    body[data-theme="dark"] .compare-table td,
+    body[data-theme="dark"] .compare-table th {
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+
+    /* USE CASE CARDS */
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.84rem;
+      margin-top: 8px;
+    }
+    .usecase-card {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .usecase-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 34px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .usecase-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .usecase-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    /* CONTENT GENERATOR */
+    .generator-card {
+      margin-top: 8px;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      background: #f9fafb;
+      padding: 10px 10px 12px;
+      font-size: 0.84rem;
+    }
+    body[data-theme="dark"] .generator-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .generator-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .generator-select {
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      font-size: 0.8rem;
+      background: #ffffff;
+    }
+    body[data-theme="dark"] .generator-select {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+    .generator-output {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      padding: 6px 8px;
+      border-radius: 10px;
+      background: #eef2ff;
+    }
+    body[data-theme="dark"] .generator-output {
+      background: rgba(30, 64, 175, 0.5);
+    }
+
+    /* LEARNING PATHS */
+    .track-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 3px;
+      color: #111827;
+    }
+    body[data-theme="dark"] .track-title { color: #e5e7eb; }
+    .track-tagline {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin: 0 0 6px;
+    }
+    .module-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 14px;
+      font-size: 0.86rem;
+      margin-top: 6px;
+    }
+    .module {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .module:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 38px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .module {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+    }
+    .module-step {
+      font-weight: 600;
+      color: #111827;
+    }
+    body[data-theme="dark"] .module-step { color: #e5e7eb; }
+    .module-tag {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      border: 1px solid rgba(129, 140, 248, 0.6);
+      white-space: nowrap;
+    }
+    body[data-theme="dark"] .module-tag {
+      color: #bfdbfe;
+      border-color: rgba(96, 165, 250, 0.9);
+    }
+    .module p {
+      margin: 4px 0;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+    .module ul {
+      padding-left: 16px;
+      margin: 4px 0;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+    .module-checklist label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 2px;
+    }
+    .module-checklist input {
+      margin-right: 4px;
+      accent-color: var(--accent-blue);
+    }
+
+    .progress-bar-wrap {
+      margin: 8px 0 4px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+    .progress-bar {
+      margin-top: 4px;
+      height: 6px;
+      width: 100%;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    body[data-theme="dark"] .progress-bar {
+      background: rgba(30, 64, 175, 0.6);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      transition: width 0.3s ease-out;
+    }
+
+    /* NODE TIMELINE */
+    .timeline {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.8rem;
+    }
+    .timeline-step {
+      flex: 1;
+      min-width: 150px;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      padding: 6px 8px;
+      background: #f9fafb;
+    }
+    body[data-theme="dark"] .timeline-step {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .timeline-step strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    details {
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      background: #eef2ff;
+      padding: 6px 8px;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+    body[data-theme="dark"] details {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    summary { cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.7rem;
+      color: var(--accent-blue);
+    }
+    details[open] summary::before { content: "▼ "; }
+
+    /* COPY BUTTONS */
+    .copy-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .copy-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: #e5e7eb;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    body[data-theme="dark"] .copy-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+    .copy-status {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    /* QUIZ */
+    .quiz-question {
+      margin-top: 10px;
+      padding: 8px 9px;
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      font-size: 0.84rem;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .quiz-question:hover {
+      transform: translateY(-2px);
+      border-color: rgba(129, 140, 248, 0.9);
+      box-shadow: 0 12px 30px rgba(148, 163, 184, 0.5);
+    }
+    body[data-theme="dark"] .quiz-question {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .quiz-q {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .quiz-options label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+    .quiz-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .quiz-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      color: #f9fafb;
+    }
+    .quiz-result {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+
+    /* MULTILANGUAGE */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.84rem;
+      margin-top: 8px;
+    }
+    .lang-card {
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .lang-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .lang-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .lang-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* NODE CHECKLIST */
+    .node-checklist {
+      margin-top: 6px;
+      padding: 8px 9px;
+      border-radius: 10px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+    .node-checklist ul {
+      margin: 4px 0 0;
+      padding-left: 16px;
+    }
+    .node-checklist li { margin-bottom: 3px; }
+
+    /* DIAGRAM SECTION */
+    .diagram-card {
+      margin-top: 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 10px 10px 12px;
+      font-size: 0.84rem;
+    }
+    body[data-theme="dark"] .diagram-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .diagram-img-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      margin-bottom: 6px;
+    }
+
+    /* EXPLAIN MODES */
+    .explain-builder { display: none; }
+    body[data-explain="builder"] .explain-builder { display: inline; }
+    body[data-explain="builder"] .explain-beginner { display: none; }
+
+    /* FAQ, NEXT STEPS, CHANGELOG */
+    .faq-item {
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      margin-top: 8px;
+      font-size: 0.84rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .faq-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .faq-item {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .faq-q {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    body[data-theme="dark"] .faq-q { color: #e5e7eb; }
+    .faq-a {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-top: 3px;
+    }
+
+    .next-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 0.84rem;
+    }
+    .next-card {
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      background: #f9fafb;
+      padding: 8px 9px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .next-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(148, 163, 184, 0.5);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+    body[data-theme="dark"] .next-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+    }
+    .next-btn {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      font-size: 0.78rem;
+      cursor: pointer;
+      background: #e5e7eb;
+    }
+    body[data-theme="dark"] .next-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(55, 65, 81, 0.9);
+      color: #e5e7eb;
+    }
+
+    .changelog-list {
+      margin: 6px 0 0;
+      padding-left: 16px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    footer {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    /* ANIM KEYFRAMES */
+    @keyframes floatLogo {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    @keyframes logoGlow {
+      0% {
+        box-shadow: 0 0 0 rgba(129, 140, 248, 0.0);
+      }
+      100% {
+        box-shadow: 0 0 16px rgba(129, 140, 248, 0.9);
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero.section-animate { grid-template-columns: minmax(0, 1fr); }
+      .hero-right { order: -1; }
+      .hero.section-animate { padding-top: 20px; }
+    }
+    @media (max-width: 780px) {
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .nav-right { width: 100%; justify-content: space-between; }
+      .audience-grid, .how-grid, .module-grid, .glossary-grid,
+      .lang-grid, .lite-grid, .usecase-grid, .next-steps-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .flow-diagram {
+        justify-content: center;
+      }
+    }
+    @media (max-width: 520px) {
+      .hero-title { font-size: 1.7rem; }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .hero-btn-primary, .hero-btn-secondary {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light" data-explain="beginner">
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <div class="nav-logo">
+          <img
+            src="https://media.discordapp.net/attachments/1335238110623174707/1446798931077107712/Untitled_design.png?ex=69354c01&is=6933fa81&hm=bd73948f6e4c89dda1cf174af0fdd490621c9173c693e530619d23fc89ae51f6&=&format=webp&quality=lossless&width=500&height=500"
+            alt="Gensyn head logo" />
+        </div>
+        <div class="nav-title">
+          <div class="nav-title-main">Gensyn Learning Hub</div>
+          <div class="nav-title-sub">Community-made · by @Villainxx17</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-links">
+          <a href="#how">How it works</a>
+          <a href="#who">Who it’s for</a>
+          <a href="#glossary">Glossary</a>
+          <a href="#litepaper">Litepaper blocks</a>
+          <a href="#paths">Learning paths</a>
+          <a href="#quiz">Quiz</a>
+          <a href="#multilang">Multi-lang</a>
+        </nav>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="explainToggle">
+            Explain mode: Beginner
+          </button>
+          <button class="toggle-btn" id="themeToggle">
+            ☀ / 🌙
+          </button>
+        </div>
+        <button class="nav-cta"
+          onclick="document.getElementById('paths').scrollIntoView({behavior:'smooth'})">
+          Start learning <span>↗</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- HERO -->
+    <section class="hero section-animate" id="top">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="hero-dot"></span>
+          <span>Curated & explained by @Villainxx17.</span>
+        </div>
+
+        <h1 class="hero-title">
+          <img
+            src="https://media.discordapp.net/attachments/1335238110623174707/1446798931077107712/Untitled_design.png?ex=69354c01&is=6933fa81&hm=bd73948f6e4c89dda1cf174af0fdd490621c9173c693e530619d23fc89ae51f6&=&format=webp&quality=lossless&width=500&height=500"
+            alt="Gensyn head" class="hero-title-logo" />
+          <span class="hero-title-main">
+            A simple, human guide to <span>Gensyn</span>.
+          </span>
+        </h1>
+
+        <p class="hero-subtitle">
+          <span class="explain-beginner">
+            Think of this like a smart notebook about Gensyn — you’ll get the
+            big picture of how decentralized, verifiable AI compute works
+            without drowning in formulas.
+          </span>
+          <span class="explain-builder">
+            This hub gives you a high-level model of Gensyn as a protocol for
+            allocating, executing, and verifying AI workloads across independent
+            workers — before you dive into the litepaper and specs.
+          </span>
+        </p>
+
+        <div class="hero-tags">
+          <span class="pill">Educational · Unofficial</span>
+          <span class="pill">For beginners, builders & node operators</span>
+          <span class="pill">Uses plain words, not marketing speak</span>
+          <span class="pill">Made by @Villainxx17</span>
+        </div>
+
+        <div class="hero-actions">
+          <button class="hero-btn-primary"
+            onclick="document.getElementById('paths').scrollIntoView({behavior:'smooth'})">
+            Explore learning paths <span>↓</span>
+          </button>
+          <button class="hero-btn-secondary"
+            onclick="window.open('https://www.gensyn.ai', '_blank')">
+            Official Gensyn website
+          </button>
+        </div>
+
+        <p class="hero-note">
+          Unofficial community page by @Villainxx17. Always verify details with official Gensyn documentation.
+        </p>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <div class="hero-logo-circle">
+              <img
+                src="https://media.discordapp.net/attachments/1335238110623174707/1446798931077107712/Untitled_design.png?ex=69354c01&is=6933fa81&hm=bd73948f6e4c89dda1cf174af0fdd490621c9173c693e530619d23fc89ae51f6&=&format=webp&quality=lossless&width=500&height=500"
+                alt="Gensyn logo large" />
+            </div>
+            <div>
+              <div class="hero-card-title">What this hub gives you</div>
+              <div class="hero-card-tag">
+                High-level understanding · Clear roles · Reusable phrasing
+              </div>
+            </div>
+          </div>
+          <div class="hero-card-body">
+            Think of this page as your <strong>Gensyn notebook on the web</strong>.
+            It turns complex ideas into language you can reuse in posts,
+            threads, Discord replies and explanations.
+          </div>
+          <div class="hero-stat-grid">
+            <div class="hero-stat">
+              <div class="hero-stat-label">Core focus</div>
+              <div class="hero-stat-value">Network · Workers · Proofs</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Tracks</div>
+              <div class="hero-stat-value">Beginner · Builder · Node</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Tone</div>
+              <div class="hero-stat-value">Plain, honest, simple</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Use cases</div>
+              <div class="hero-stat-value">Learn · Explain · Create content</div>
+            </div>
+          </div>
+
+          <div class="hero-pfp-row">
+            <div class="hero-pfp">
+              <img
+                src="https://media.discordapp.net/attachments/1335238110623174707/1446798931077107712/Untitled_design.png?ex=69354c01&is=6933fa81&hm=bd73948f6e4c89dda1cf174af0fdd490621c9173c693e530619d23fc89ae51f6&=&format=webp&quality=lossless&width=500&height=500"
+                alt="Gensyn profile picture" />
+            </div>
+            <div>
+              <div class="hero-pfp-text-title">Gensyn profile visual</div>
+              <div class="hero-pfp-text-sub">
+                Used here as a visual anchor for the network you’re learning about.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="block section-animate" id="how">
+      <h2>How Gensyn fits into the AI compute picture</h2>
+      <p class="section-tagline">
+        One simple story before you get lost in diagrams and formulas.
+      </p>
+
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="how-title">1 · You submit an AI job</div>
+          <div class="how-body">
+            As a builder you define a training or inference task.
+            <span class="explain-beginner">
+              You basically say: "Please train this model / run this model with this data."
+            </span>
+            <span class="explain-builder">
+              The job is represented in a structured way so it can be split into smaller,
+              parallelizable units instead of one opaque blob.
+            </span>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-title">2 · Workers run the compute</div>
+          <div class="how-body">
+            Independent machines (“workers”) pick up units that fit their hardware.
+            <span class="explain-beginner">
+              People with GPUs help run pieces of your training or inference.
+            </span>
+            <span class="explain-builder">
+              Coordination components like BlockAssist help shape jobs into units and
+              match them with suitable workers across the network.
+            </span>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-title">3 · Verification & incentives</div>
+          <div class="how-body">
+            The protocol’s goal is to give you a basis to
+            <strong>check that training really happened</strong>.
+            <span class="explain-beginner">
+              Honest work should pay, cheating should be hard and risky.
+            </span>
+            <span class="explain-builder">
+              Proof-of-training ideas aim to make “I really trained this” a verifiable
+              claim, not just log-based trust in a single provider.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Flow Diagram -->
+      <div class="flow-diagram">
+        <div class="flow-step">Job defined</div>
+        <div class="flow-arrow">⟶</div>
+        <div class="flow-step">Split into units</div>
+        <div class="flow-arrow">⟶</div>
+        <div class="flow-step">Matched to workers</div>
+        <div class="flow-arrow">⟶</div>
+        <div class="flow-step">Compute & checks</div>
+        <div class="flow-arrow">⟶</div>
+        <div class="flow-step">Verified result</div>
+      </div>
+    </section>
+
+    <!-- WHO IT'S FOR -->
+    <section class="block section-animate" id="who">
+      <h2>Who this learning hub is for</h2>
+      <p class="section-tagline">
+        Different roles, same goal: understand what Gensyn actually is and how you might use it.
+      </p>
+
+      <div class="audience-grid">
+        <div class="aud-card">
+          <div class="aud-title">🧒 Curious beginner</div>
+          <div class="aud-label">“I’ve seen Gensyn mentioned but I don’t get it yet.”</div>
+          <ul class="aud-list">
+            <li>Want a non-technical explanation of “decentralized AI compute”.</li>
+            <li>Prefer diagrams in your head, not just on PDFs.</li>
+            <li>Need simple wording you can repeat to others.</li>
+          </ul>
+        </div>
+        <div class="aud-card">
+          <div class="aud-title">🧠 AI builder / researcher</div>
+          <div class="aud-label">“I train models or design pipelines.”</div>
+          <ul class="aud-list">
+            <li>Want to know where Gensyn plugs into your workflow.</li>
+            <li>Care about cost, scale and verifiable training.</li>
+            <li>Prefer fast mental models before deep specs.</li>
+          </ul>
+        </div>
+        <div class="aud-card">
+          <div class="aud-title">🛠 Node / worker operator</div>
+          <div class="aud-label">“I have hardware and may want to join.”</div>
+          <ul class="aud-list">
+            <li>Need clarity on what you’re actually offering.</li>
+            <li>Want to think about rewards, uptime and risk.</li>
+            <li>Plan to read official worker docs afterwards.</li>
+          </ul>
+
+          <!-- Node operator checklist -->
+          <div class="node-checklist">
+            <strong>Quick checklist before you run a worker:</strong>
+            <ul>
+              <li>Know your hardware (GPU VRAM, CPU, RAM, bandwidth).</li>
+              <li>Have a realistic view of uptime and cooling.</li>
+              <li>Be comfortable reading official Gensyn worker docs.</li>
+              <li>Understand that rewards depend on honest, verifiable work.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLOSSARY -->
+    <section class="block section-animate" id="glossary">
+      <h2>Mini glossary · 10 Gensyn words in human language</h2>
+      <p class="section-tagline">
+        Use this as a cheat sheet while reading the litepaper or answering questions on X / Discord.
+      </p>
+
+      <div class="glossary-grid">
+        <div class="glossary-item">
+          <div class="glossary-term">Worker</div>
+          <div class="glossary-definition">
+            A machine (often with a GPU) that runs parts of AI jobs on the Gensyn network.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Job</div>
+          <div class="glossary-definition">
+            The AI task you submit — for example, “train this model” or “run inference on this data”.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Unit of work</div>
+          <div class="glossary-definition">
+            A small piece of a larger job that can be sent to a worker (e.g. some steps or batches).
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">BlockAssist</div>
+          <div class="glossary-definition">
+            Coordination logic that helps structure jobs and match them with capable workers.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Proof-of-training</div>
+          <div class="glossary-definition">
+            A way to give evidence that training really happened as promised, not just logs and screenshots.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Verifiable compute</div>
+          <div class="glossary-definition">
+            Compute where you don’t only trust the result — you have a structured way to check it.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Decentralized AI compute</div>
+          <div class="glossary-definition">
+            AI workloads running on many independent machines instead of one central cloud provider.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Incentives</div>
+          <div class="glossary-definition">
+            The reward design that should make honest work more attractive than cheating or going offline.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Protocol</div>
+          <div class="glossary-definition">
+            The set of rules, incentives and mechanisms that coordinate how jobs and workers interact.
+          </div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Network</div>
+          <div class="glossary-definition">
+            The whole system: builders, workers, coordination logic, proofs and the flow of value between them.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LITEPAPER BLOCKS -->
+    <section class="block section-animate" id="litepaper">
+      <h2>Litepaper in 10 small blocks</h2>
+      <p class="section-tagline">
+        These aren’t official summaries — they’re small content-ready blocks you can reuse or tweak.
+      </p>
+
+      <div class="lite-grid">
+        <div class="lite-card">
+          <div class="lite-title">1 · Network overview</div>
+          <div class="lite-body">
+            Gensyn aims to connect people who need AI compute with machines that can provide it, using a protocol that
+            tries to make work verifiable instead of just trusted.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Gensyn connects people who need AI compute with machines that can provide it, using a protocol that pushes towards verifiable work instead of blind trust.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">2 · Jobs as structured units</div>
+          <div class="lite-body">
+            Instead of treating a training run as one huge blob, the network cares about breaking it into structured units,
+            so scheduling and verification both become easier.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="In Gensyn, AI jobs aren’t treated as one giant blob. They’re broken into structured units so scheduling and verification are easier.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">3 · Workers & hardware</div>
+          <div class="lite-body">
+            Workers bring different hardware profiles — GPU, CPU, memory, bandwidth. The protocol helps match the right
+            units of work to the right mix of resources.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Workers in Gensyn contribute different mixes of GPU, CPU, memory and bandwidth, and the protocol matches units of AI work to the right hardware.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">4 · Economic layer (high level)</div>
+          <div class="lite-body">
+            At a high level, the economic layer should reward useful, honest compute and make dishonest or low-quality
+            behaviour unattractive over time.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Gensyn’s economic layer is designed so that honest, useful compute is rewarded, while low-quality or dishonest behaviour becomes unattractive over time.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">5 · Proof-of-training</div>
+          <div class="lite-body">
+            The proof-of-training ideas aim to give builders something stronger than “we promise we trained this” — a more
+            structured way to argue that the training actually happened.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Proof-of-training in Gensyn is about moving from ‘we promise we trained this’ to a more structured way of arguing that training actually happened.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">6 · Verifiable compute</div>
+          <div class="lite-body">
+            Verifiable compute in this context means building mechanisms where it’s cheaper to be honest than to fake work,
+            and where misbehaviour can be surfaced over time.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Verifiable compute in Gensyn means designing things so that being honest is easier and cheaper than faking work, and misbehaviour can be surfaced over time.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">7 · Role of coordination</div>
+          <div class="lite-body">
+            Components like BlockAssist focus on shaping jobs and matching them to workers, so the network can use
+            available compute efficiently instead of randomly.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Coordination components like BlockAssist help shape jobs and match them to workers, so available compute is used efficiently instead of randomly.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">8 · Builders’ mental model</div>
+          <div class="lite-body">
+            Builders should ideally think: “I submit an AI job, it’s split into units, run across workers, and I get a result
+            plus stronger confidence in what actually ran.”
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="As a builder, your mental model is: you submit an AI job, it’s split into units, run across workers, and you get back a result plus stronger confidence in what actually ran.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">9 · Node operator mental model</div>
+          <div class="lite-body">
+            Node operators should think in terms of offering reliable compute to the network over time, not one-off jobs, and
+            being aligned with honest behaviour.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Node operators in Gensyn should think in terms of providing reliable compute over time, aligned with honest, verifiable work instead of one-off jobs.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="lite-card">
+          <div class="lite-title">10 · Long-term vision</div>
+          <div class="lite-body">
+            Long term, Gensyn points to a world where AI training and inference can tap into a broader pool of hardware, with
+            more open ways to verify what happened.
+          </div>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="Long term, Gensyn points to AI jobs tapping into a wider pool of hardware, with more open ways to verify what actually happened during training and inference.">
+              Copy block
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="block section-animate" id="compare">
+      <h2>Normal cloud vs Gensyn-style network (high level)</h2>
+      <p class="section-tagline">
+        This is not a one-to-one technical comparison — it’s a mental model table.
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Typical cloud setup</th>
+            <th>Gensyn-style network (high level)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Who owns the hardware?</td>
+            <td>One large company or a small set of providers.</td>
+            <td>Many independent operators joining the network.</td>
+          </tr>
+          <tr>
+            <td>Where jobs run</td>
+            <td>Inside a single provider’s infrastructure and regions.</td>
+            <td>Across a distributed pool of workers with different profiles.</td>
+          </tr>
+          <tr>
+            <td>Trust model</td>
+            <td>Mostly logs, contracts and provider reputation.</td>
+            <td>Aim is to push towards more <strong>verifiable compute</strong>.</td>
+          </tr>
+          <tr>
+            <td>Flexibility of supply</td>
+            <td>Limited by provider’s own inventory.</td>
+            <td>Potential to tap into more diversified, external hardware.</td>
+          </tr>
+          <tr>
+            <td>How you think about training proof</td>
+            <td>“We ran what we said we would” + logs/screenshots.</td>
+            <td>“Here is structured evidence that training happened as promised.”</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="block section-animate" id="usecases">
+      <h2>Use cases · When does Gensyn’s approach help?</h2>
+      <p class="section-tagline">
+        Small cards you can turn into tweets, replies or Discord messages.
+      </p>
+
+      <div class="usecase-grid">
+        <div class="usecase-card">
+          <div class="usecase-title">Cheap experiments</div>
+          <p>
+            You want to try many different model runs without committing to a single cloud contract. A network of workers
+            potentially gives more flexible options over time.
+          </p>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="One interesting Gensyn angle: cheaper experiments. Instead of locking into one cloud, you can tap into a network of workers and shape how you run many smaller AI jobs.">
+              Copy for Discord
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-title">Access to hidden hardware</div>
+          <p>
+            There’s a lot of GPU capacity outside big clouds. A network like Gensyn tries to coordinate that supply for AI
+            work in a more structured way.
+          </p>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="A lot of GPUs live outside the big clouds. Gensyn’s idea is to coordinate that ‘hidden’ hardware into something builders can actually use.">
+              Copy for post
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-title">Stronger training story</div>
+          <p>
+            When training really matters, just saying “we trained it” isn’t enough. Proof-of-training ideas aim to give a
+            stronger story around what actually ran.
+          </p>
+          <div class="copy-row">
+            <button class="copy-btn"
+              data-copy="For serious AI training, “trust me, I trained it” isn’t enough. Gensyn leans into proof-of-training ideas so you have a stronger story for what actually ran.">
+              Copy to tweet
+            </button>
+            <span class="copy-status"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT IDEAS GENERATOR -->
+    <section class="block section-animate" id="generator">
+      <h2>Content ideas helper</h2>
+      <p class="section-tagline">
+        Not a real AI tool — just pre-written drafts you can copy, tweak and post.
+      </p>
+
+      <div class="generator-card">
+        <div class="generator-row">
+          <select class="generator-select" id="contentType">
+            <option value="tweet">Short tweet</option>
+            <option value="thread">Thread intro</option>
+            <option value="reply">Discord / X reply</option>
+          </select>
+          <select class="generator-select" id="contentTopic">
+            <option value="workers">Workers</option>
+            <option value="proofs">Proof-of-training</option>
+            <option value="why">Why decentralize AI compute</option>
+          </select>
+          <button class="copy-btn" id="generateContent">
+            Generate draft
+          </button>
+        </div>
+        <div id="contentOutput" class="generator-output">
+          Pick a format + topic, then hit “Generate draft”.
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING PATHS -->
+    <section class="block section-animate" id="paths">
+      <h2>Learning paths · choose where to start</h2>
+      <p class="section-tagline">
+        Each path is small on purpose. You can always add more detail as you learn.
+      </p>
+
+      <div class="progress-bar-wrap">
+        <span id="progressText">Progress: 0 / 0 checks completed.</span>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Beginner Path -->
+      <div style="margin-top:8px;">
+        <div class="track-title">Beginner Path · Core concepts</div>
+        <p class="track-tagline">
+          Start here if Gensyn and “decentralized compute” are new words for you.
+        </p>
+        <div class="module-grid">
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 1 · What is Gensyn?</span>
+                <span class="module-tag">Concept</span>
+              </div>
+              <p>
+                <span class="explain-beginner">
+                  Gensyn is a network where many different machines can help run AI training and
+                  inference jobs, instead of relying on a single cloud.
+                </span>
+                <span class="explain-builder">
+                  Gensyn coordinates a marketplace of independent compute providers for AI work,
+                  with a strong focus on verifiability instead of blind trust.
+                </span>
+              </p>
+              <ul>
+                <li>Builders send training or inference tasks.</li>
+                <li>Workers run pieces of those tasks.</li>
+                <li>The protocol cares about verifiable compute.</li>
+              </ul>
+
+              <!-- Copy button -->
+              <div class="copy-row">
+                <button class="copy-btn"
+                  data-copy="Gensyn is a network where independent machines run AI training and inference jobs, with a design that aims for verifiable compute instead of trusting a single cloud.">
+                  Copy Gensyn one-liner
+                </button>
+                <span class="copy-status"></span>
+              </div>
+
+              <div class="module-checklist" style="margin-top:6px;">
+                <label><input type="checkbox" data-progress="1" /> I can explain Gensyn in my own words.</label>
+              </div>
+            </div>
+
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 2 · Why decentralize?</span>
+                <span class="module-tag">Motivation</span>
+              </div>
+              <p>
+                <span class="explain-beginner">
+                  Today, AI compute is mostly in a few big clouds. Decentralizing it opens the
+                  door to more supply and different kinds of guarantees.
+                </span>
+                <span class="explain-builder">
+                  Concentration of compute creates bottlenecks, pricing power and trust issues. A
+                  decentralized network can unlock more supply and different verification models.
+                </span>
+              </p>
+
+              <div class="copy-row">
+                <button class="copy-btn"
+                  data-copy="Most AI training runs on a few big clouds. A decentralized network like Gensyn tries to unlock more compute supply while making it easier to verify that training really happened.">
+                  Copy “why Gensyn” snippet
+                </button>
+                <span class="copy-status"></span>
+              </div>
+
+              <div class="module-checklist" style="margin-top:6px;">
+                <label><input type="checkbox" data-progress="1" /> I know at least one reason decentralization matters for AI.</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 3 · Workers & BlockAssist</span>
+                <span class="module-tag">Roles</span>
+              </div>
+              <p>
+                <strong>Workers</strong> are machines offering compute.
+                <strong>BlockAssist</strong> helps shape jobs into smaller pieces and match them with workers.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I can describe what a worker does.</label>
+                <label><input type="checkbox" data-progress="1" /> I can give a one-line summary of BlockAssist.</label>
+              </div>
+            </div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 4 · Proof-of-training (simple view)</span>
+                <span class="module-tag">Verification</span>
+              </div>
+              <p>
+                The goal is to move from “trust me, I trained your model” to
+                “here’s structured evidence that the training happened as promised”.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I understand why AI training benefits from verification.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details>
+          <summary>Ready-to-use short description for posts</summary>
+          <p style="margin-top:4px;">
+            “Gensyn is a network where independent machines run AI training jobs,
+            with a design that aims for <strong>verifiable compute</strong> instead
+            of pure trust in a single cloud provider.”
+          </p>
+        </details>
+      </div>
+
+      <!-- AI Builder Path -->
+      <div style="margin-top:14px;">
+        <div class="track-title">AI Builder Path · How jobs flow</div>
+        <p class="track-tagline">
+          For people who already think in terms of models, datasets and training runs.
+        </p>
+        <div class="module-grid">
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 1 · From job to units</span>
+                <span class="module-tag">Workflow</span>
+              </div>
+              <p>
+                A training job can be represented as smaller units (steps, batches
+                or shards). That structure helps with parallelization and with
+                reasoning about what was actually computed.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I understand why jobs are split into units.</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 2 · Matching to workers</span>
+                <span class="module-tag">Scheduling</span>
+              </div>
+              <p>
+                Workers advertise their capabilities. The network and coordination
+                logic match units of work to workers that can handle them.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I can explain how units get paired with workers.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node Operator Path -->
+      <div style="margin-top:14px;">
+        <div class="track-title">Node Operator Path · Thinking like a worker</div>
+        <p class="track-tagline">
+          For people who want to connect hardware into the network.
+        </p>
+        <div class="module-grid">
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 1 · What you offer</span>
+                <span class="module-tag">Resources</span>
+              </div>
+              <p>
+                Your main product is <strong>reliable compute</strong>:
+                GPU, CPU, memory and bandwidth. The mix of these determines which
+                tasks you’re useful for.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I can list my own hardware resources clearly.</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="module">
+              <div class="module-header">
+                <span class="module-step">Module 2 · Rewards & reliability</span>
+                <span class="module-tag">Incentives</span>
+              </div>
+              <p>
+                The high-level idea: honest, verifiable work should be rewarded.
+                Being unreliable or trying to cheat should be risky and
+                unattractive over time.
+              </p>
+              <div class="module-checklist">
+                <label><input type="checkbox" data-progress="1" /> I understand why reliability and honesty matter for rewards.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node timeline -->
+        <div class="timeline">
+          <div class="timeline-step">
+            <strong>Step 1</strong>
+            Understand the basic Gensyn story and roles.
+          </div>
+          <div class="timeline-step">
+            <strong>Step 2</strong>
+            Read the official worker / node operator docs.
+          </div>
+          <div class="timeline-step">
+            <strong>Step 3</strong>
+            Map your hardware: GPUs, memory, bandwidth, power.
+          </div>
+          <div class="timeline-step">
+            <strong>Step 4</strong>
+            Think through risk, uptime and economics before joining.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MULTI-LANGUAGE SUMMARY -->
+    <section class="block section-animate" id="multilang">
+      <h2>Same Gensyn story in 3 languages</h2>
+      <p class="section-tagline">
+        Use these as ready-made captions or intros when you explain Gensyn in different languages.
+      </p>
+
+      <div class="lang-grid">
+        <div class="lang-card">
+          <div class="lang-label">English</div>
+          <p>
+            Gensyn is a network where independent machines run AI jobs, with a design that
+            focuses on verifiable compute instead of blind trust in one cloud provider.
+          </p>
+        </div>
+        <div class="lang-card">
+          <div class="lang-label">Hindi</div>
+          <p>
+            Gensyn एक ऐसा नेटवर्क है जहाँ अलग-अलग मशीनें मिलकर AI के काम चलाती हैं।
+            कोशिश ये है कि सिर्फ भरोसा नहीं, बल्कि ट्रेनिंग के लिए <strong>साबूत</strong> भी हो।
+          </p>
+        </div>
+        <div class="lang-card">
+          <div class="lang-label">Marathi</div>
+          <p>
+            Gensyn म्हणजे असा नेटवर्क जिथे वेगवेगळ्या मशीन एकत्र येऊन AI ची कामं करतात.
+            फक्त “मी ट्रेन केलंय” म्हणण्यापेक्षा, त्यामागे <strong>पुरावा</strong> असावा हा मुख्य फोकस आहे.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIAGRAM / IMAGE EXPLAINER -->
+    <section class="block section-animate" id="diagram">
+      <h2>One-image explainer (save this before the litepaper)</h2>
+      <p class="section-tagline">
+        You can replace this placeholder image with your own design later.
+      </p>
+
+      <div class="diagram-card">
+        <div class="diagram-img-wrap">
+          <!-- Replace src with your hosted diagram later -->
+          <img src="https://via.placeholder.com/900x400.png?text=Your+Gensyn+Diagram+Here"
+               alt="Gensyn one-image explainer" />
+        </div>
+        <p>
+          Idea for this image: a simple flow of <strong>Job → Units → Workers → Proofs → Result</strong>, with short
+          labels like “builder”, “network”, “worker”, “verification”.
+        </p>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="block section-animate" id="quiz">
+      <h2>Quick quiz · Did the Gensyn idea click?</h2>
+      <p class="section-tagline">
+        4 small questions. No score on-chain, only for your own brain.
+      </p>
+
+      <div class="quiz-question" data-correct="b">
+        <div class="quiz-q">
+          1. What is a “worker” in the Gensyn context?
+        </div>
+        <div class="quiz-options">
+          <label><input type="radio" name="q1" value="a" /> A UI component in the dashboard.</label>
+          <label><input type="radio" name="q1" value="b" /> A machine that runs parts of AI jobs.</label>
+          <label><input type="radio" name="q1" value="c" /> A token used to pay for compute.</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="c">
+        <div class="quiz-q">
+          2. Why does Gensyn care about proof-of-training?
+        </div>
+        <div class="quiz-options">
+          <label><input type="radio" name="q2" value="a" /> To make training slower.</label>
+          <label><input type="radio" name="q2" value="b" /> To replace all logs.</label>
+          <label><input type="radio" name="q2" value="c" /> To give evidence that training really happened as promised.</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="a">
+        <div class="quiz-q">
+          3. What does decentralizing AI compute potentially unlock?
+        </div>
+        <div class="quiz-options">
+          <label><input type="radio" name="q3" value="a" /> More supply and alternative trust models.</label>
+          <label><input type="radio" name="q3" value="b" /> Only higher prices.</label>
+          <label><input type="radio" name="q3" value="c" /> Nothing changes.</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="b">
+        <div class="quiz-q">
+          4. In Gensyn, what is the main “product” of a node / worker operator?
+        </div>
+        <div class="quiz-options">
+          <label><input type="radio" name="q4" value="a" /> Governance votes.</label>
+          <label><input type="radio" name="q4" value="b" /> Reliable compute (GPU, CPU, memory, bandwidth).</label>
+          <label><input type="radio" name="q4" value="c" /> Only storage.</label>
+        </div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="quiz-btn" id="quizSubmit">Check my answers</button>
+        <span class="quiz-result" id="quizResult"></span>
+      </div>
+    </section>
+
+    <!-- FAQ + FEEDBACK + NEXT STEPS + CHANGELOG -->
+    <section class="block section-animate" id="faq">
+      <h2>FAQ · About this site</h2>
+      <p class="section-tagline">
+        This isn’t documentation — it’s a helper so docs feel easier when you get there.
+      </p>
+
+      <div class="faq-item">
+        <div class="faq-q">Is this an official Gensyn resource?</div>
+        <div class="faq-a">
+          No. This is an <strong>unofficial, community-made</strong> learning
+          page by <strong>@Villainxx17</strong>. Always rely on the official
+          Gensyn website, docs and litepaper for the precise, up-to-date details.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">What is the goal of this page?</div>
+        <div class="faq-a">
+          To give you a <strong>clear mental picture</strong> of what Gensyn is,
+          who participates, and how an AI job moves through the network — in
+          simple words you can re-use.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">How should I use this for my own content?</div>
+        <div class="faq-a">
+          Treat this as a starting point. Edit the text into your own style,
+          translate it, and use pieces of it as explanations on X, Discord or in
+          blog posts about Gensyn.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Feedback / ideas?</div>
+        <div class="faq-a">
+          If something feels unclear or if you have ideas for new sections,
+          please DM <strong>@Villainxx17</strong> on X or ping in relevant
+          Gensyn community spaces. This page will keep evolving.
+        </div>
+      </div>
+
+      <h2 style="margin-top:16px;">Next steps after this page</h2>
+      <p class="section-tagline">
+        If the mental model feels clear, here are three natural “next moves”.
+      </p>
+
+      <div class="next-steps-grid">
+        <div class="next-card">
+          <strong>Read the official website</strong>
+          <p>Get the official high-level story, team and vision straight from Gensyn.</p>
+          <button class="next-btn" onclick="window.open('https://www.gensyn.ai', '_blank')">
+            Open gensyn.ai ↗
+          </button>
+        </div>
+        <div class="next-card">
+          <strong>Open the litepaper</strong>
+          <p>Use this page as your map while reading the more formal, detailed document.</p>
+          <button class="next-btn" onclick="window.open('https://docs.gensyn.ai/litepaper', '_blank')">
+            Open litepaper ↗
+          </button>
+        </div>
+        <div class="next-card">
+          <strong>Engage in the community</strong>
+          <p>Ask questions, share your understanding and see how others think about Gensyn.</p>
+          <button class="next-btn" onclick="window.open('https://www.gensyn.ai', '_blank')">
+            Find links ↗
+          </button>
+        </div>
+      </div>
+
+      <h2 style="margin-top:16px;">Changelog</h2>
+      <ul class="changelog-list">
+        <li><strong>v1.0</strong> – Base hub: hero, how it works, paths, glossary, quiz.</li>
+        <li><strong>v1.1</strong> – Added dark mode, explain modes, copy-to-post buttons.</li>
+        <li><strong>v1.2</strong> – Added litepaper blocks, comparison table, use cases, content helper, progress tracking, diagram, next steps & changelog.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Gensyn Learning Hub – community educational page.<br />
+      Made by <strong>@Villainxx17</strong> · not affiliated with Gensyn.
+    </footer>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const body = document.body;
+
+      /* THEME TOGGLE */
+      const themeToggle = document.getElementById("themeToggle");
+      const savedTheme = localStorage.getItem("gensynTheme");
+      if (savedTheme === "dark" || savedTheme === "light") {
+        body.dataset.theme = savedTheme;
+      }
+
+      function updateThemeLabel() {
+        if (!themeToggle) return;
+        themeToggle.textContent =
+          body.dataset.theme === "dark" ? "🌙 Dark" : "☀ Light";
+      }
+      updateThemeLabel();
+
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          body.dataset.theme = body.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem("gensynTheme", body.dataset.theme);
+          updateThemeLabel();
+        });
+      }
+
+      /* EXPLAIN MODE TOGGLE */
+      const explainToggle = document.getElementById("explainToggle");
+      function updateExplainLabel() {
+        if (!explainToggle) return;
+        const mode = body.dataset.explain || "beginner";
+        explainToggle.textContent =
+          mode === "builder"
+            ? "Explain mode: Builder"
+            : "Explain mode: Beginner";
+      }
+      updateExplainLabel();
+
+      if (explainToggle) {
+        explainToggle.addEventListener("click", () => {
+          body.dataset.explain =
+            body.dataset.explain === "builder" ? "beginner" : "builder";
+          updateExplainLabel();
+        });
+      }
+
+      /* COPY BUTTONS */
+      const copyButtons = document.querySelectorAll(".copy-btn");
+      copyButtons.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const text = btn.dataset.copy || "";
+          const status = btn.nextElementSibling;
+          try {
+            await navigator.clipboard.writeText(text);
+            if (status) {
+              status.textContent = "Copied ✔";
+              setTimeout(() => (status.textContent = ""), 1500);
+            }
+          } catch (e) {
+            if (status) status.textContent = "Could not copy";
+          }
+        });
+      });
+
+      /* QUIZ LOGIC */
+      const quizSubmit = document.getElementById("quizSubmit");
+      const quizResult = document.getElementById("quizResult");
+      const questions = document.querySelectorAll(".quiz-question");
+
+      if (quizSubmit && quizResult) {
+        quizSubmit.addEventListener("click", () => {
+          let score = 0;
+          let total = 0;
+
+          questions.forEach((q, idx) => {
+            const correct = q.dataset.correct;
+            const name = "q" + (idx + 1);
+            const checked = q.querySelector("input[name='" + name + "']:checked");
+            if (correct) {
+              total += 1;
+              if (checked && checked.value === correct) {
+                score += 1;
+              }
+            }
+          });
+
+          if (total === 0) return;
+
+          const percent = Math.round((score / total) * 100);
+          let msg = `You scored ${score}/${total} (${percent}%). `;
+
+          if (percent === 100) {
+            msg += "Nice — you can probably explain Gensyn to others now.";
+          } else if (percent >= 60) {
+            msg += "Good base. Re-read any parts that felt fuzzy.";
+          } else {
+            msg += "No stress. Revisit the beginner path, then try again.";
+          }
+
+          quizResult.textContent = msg;
+        });
+      }
+
+      /* SCROLL ANIMATION */
+      const animatedSections = document.querySelectorAll(".section-animate");
+      if ("IntersectionObserver" in window && animatedSections.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+        animatedSections.forEach((sec) => observer.observe(sec));
+      } else {
+        animatedSections.forEach((sec) => sec.classList.add("in-view"));
+      }
+
+      /* CONTENT GENERATOR */
+      const contentType = document.getElementById("contentType");
+      const contentTopic = document.getElementById("contentTopic");
+      const generateBtn = document.getElementById("generateContent");
+      const contentOutput = document.getElementById("contentOutput");
+
+      const templates = {
+        tweet: {
+          workers:
+            "In Gensyn, a 'worker' isn’t a person, it’s a machine. GPUs, CPUs, bandwidth – offered by independent operators to run pieces of AI jobs on a verifiable network.",
+          proofs:
+            "Most AI training is basically ‘trust me, I ran it’. Gensyn leans into proof-of-training so you can build a stronger story around what actually happened.",
+          why:
+            "Today most AI compute lives in a handful of clouds. I like that Gensyn explores a different route: more open supply + a push towards verifiable compute."
+        },
+        thread: {
+          workers:
+            "Thread: Gensyn workers in simple words.\n\n1/ In Gensyn, a worker is just a machine offering compute: GPU, CPU, memory, bandwidth.\n2/ Jobs are split into units and sent where they fit best.\n3/ The goal: honest, verifiable work across many independent operators.\n4/ Here’s how you can think about it as a builder…",
+          proofs:
+            "Thread: Why proof-of-training matters for AI.\n\n1/ 'We trained this model, trust us' is the default today.\n2/ For higher-stakes systems, that’s a weak story.\n3/ Gensyn leans into proof-of-training – ways to argue what training actually ran.\n4/ It’s still early, but the direction matters.\n5/ Here’s the mental model I use…",
+          why:
+            "Thread: Why I pay attention to decentralized AI compute.\n\n1/ Most AI runs on a few big clouds.\n2/ That creates bottlenecks, pricing power and trust issues.\n3/ A network like Gensyn experiments with another route: many workers, verifiable work, new economics.\n4/ Not financial advice, just infrastructure curiosity."
+        },
+        reply: {
+          workers:
+            "Short answer: in Gensyn, a worker is a machine that runs pieces of AI jobs (GPU/CPU/etc.), not a human. Different workers bring different hardware profiles into the network.",
+          proofs:
+            "Yeah, the interesting bit for me is proof-of-training. Instead of just ‘trust us’, Gensyn is exploring ways to give a more concrete story of what actually ran.",
+          why:
+            "I see it less as 'vs cloud', more as 'cloud + another option'. Gensyn tries to coordinate external hardware and push towards more verifiable training."
+        }
+      };
+
+      if (generateBtn && contentOutput) {
+        generateBtn.addEventListener("click", () => {
+          const type = contentType.value;
+          const topic = contentTopic.value;
+          const text = templates[type]?.[topic] || "No template found for that combo yet.";
+          contentOutput.textContent = text;
+        });
+      }
+
+      /* PROGRESS TRACKER */
+      const progressChecks = document.querySelectorAll('input[type="checkbox"][data-progress="1"]');
+      const progressText = document.getElementById("progressText");
+      const progressFill = document.getElementById("progressFill");
+
+      const PROGRESS_KEY = "gensynProgress_v1";
+
+      function loadProgress() {
+        try {
+          const raw = localStorage.getItem(PROGRESS_KEY);
+          if (!raw) return {};
+          return JSON.parse(raw);
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress(state) {
+        try {
+          localStorage.setItem(PROGRESS_KEY, JSON.stringify(state));
+        } catch {}
+      }
+
+      const progressState = loadProgress();
+
+      progressChecks.forEach((cb, index) => {
+        const key = String(index);
+        if (progressState[key]) {
+          cb.checked = true;
+        }
+        cb.addEventListener("change", () => {
+          progressState[key] = cb.checked;
+          saveProgress(progressState);
+          updateProgress();
+        });
+      });
+
+      function updateProgress() {
+        const total = progressChecks.length;
+        let done = 0;
+        progressChecks.forEach((cb) => {
+          if (cb.checked) done += 1;
+        });
+        if (progressText) {
+          progressText.textContent = `Progress: ${done} / ${total} checks completed.`;
+        }
+        if (progressFill && total > 0) {
+          const percent = (done / total) * 100;
+          progressFill.style.width = percent + "%";
+        }
+      }
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
